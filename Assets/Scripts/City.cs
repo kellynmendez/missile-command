@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class City : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] GameObject _visualsToDeactivate;
+    [SerializeField] Collider _colliderToDeactivate;
+    bool _active = true;
 
-    // Update is called once per frame
-    void Update()
+    public void Destroyed()
     {
-        
+        // Deactivating visuals and collider
+        _visualsToDeactivate.SetActive(false);
+        _colliderToDeactivate.enabled = false;
+        // Playing sound effect TODO
     }
 }
