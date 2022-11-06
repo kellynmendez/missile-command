@@ -110,16 +110,18 @@ public class UIManager : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(_delayBetweenMissiles);
 
+        i = 0;
         // Adding all city bonus points
         for (int cCount = 0; cCount < _cityArray.Length; cCount++)
         {
             City city = _cityArray[cCount];
             if (city.CityActive())
             {
-                _cityImages[cCount].SetActive(true);
+                _cityImages[i].SetActive(true);
                 _cityBonus += _savedCitiesPoints;
                 _cityBonusText.text = _cityBonus.ToString();
                 city.RemoveCity();
+                i++;
                 yield return new WaitForSecondsRealtime(_delayBetweenCities);
             }
             yield return null;

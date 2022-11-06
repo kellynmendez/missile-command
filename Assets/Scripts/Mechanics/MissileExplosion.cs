@@ -19,7 +19,6 @@ public class MissileExplosion : MonoBehaviour
 
         for (int i = 0; i < numCollisionEvents; i++)
         {
-            Debug.Log("particle entered");
             // If particle entered a city, then destroy it
             City city = _collisionEvents[i].colliderComponent.gameObject.GetComponent<City>();
             if (city)

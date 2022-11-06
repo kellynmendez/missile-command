@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBomber : MonoBehaviour
+public class NormalBombDropper : MonoBehaviour
 {
     // Targets are the three missile bases and the six cities
     [SerializeField] GameObject[] _targetsArray;
@@ -22,9 +22,18 @@ public class EnemyBomber : MonoBehaviour
     {
         _bombsDropped = new List<Bomb>();
         _targets = new List<GameObject>();
+        // Making targets array a list
         for (int i = 0; i < _targetsArray.Length; i++)
         {
             _targets.Add(_targetsArray[i]);
+        }
+
+        // Populating list of with bombs to drop
+        for (int i = 0; i < _bombNum; i++)
+        {
+            Bomb bomb = Instantiate(_enemyBomb);
+            bomb.gameObject.SetActive(false);
+            _bombsDropped.Add(bomb);
         }
     }
 
@@ -44,7 +53,7 @@ public class EnemyBomber : MonoBehaviour
             }
         }
 
-        if (_bombsDestroyed == _bombNum)
+        if (_bombsDestroyed == _bombsDropped.Count)
         {
             _waveFinished = true;
         }
@@ -54,12 +63,12 @@ public class EnemyBomber : MonoBehaviour
     {
         yield return new WaitForSeconds(_startDelay);
 
-        for (int i = 0; i < _bombNum; i++)
+        for (int i = 0; i < _bombsDropped.Count; i++)
         {
             // Instantiating the bomb
-            Bomb bomb = Instantiate(_enemyBomb);
+            Bomb bomb = _bombsDropped[i];
+            bomb.gameObject.SetActive(true);
             bomb.gameObject.transform.position = transform.position;
-            _bombsDropped.Add(bomb);
             // Getting the target
             GameObject target = RandomTarget();
             // Removing target from target list

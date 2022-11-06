@@ -46,6 +46,7 @@ public class Bomb : MonoBehaviour
         StartCoroutine(BombRoutine(transform, from, to, distance / _speed));
     }
 
+    // lerps the bomb to target position
     private IEnumerator BombRoutine(Transform bomb, Vector3 from, Vector3 to,
         float duration)
     {

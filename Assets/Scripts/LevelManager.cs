@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    [SerializeField] EnemyBomber[] _bombers;
-    [SerializeField] SplitBomber[] _splitBombers;
+    [SerializeField] NormalBombDropper[] _bombers;
+    [SerializeField] SplitBombDropper[] _splitBombers;
 
     private int _cityCount = 6;
     private bool _waveFinished = false;
