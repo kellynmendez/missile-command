@@ -9,32 +9,36 @@ public class Bomb : MonoBehaviour
     [SerializeField] GameObject _visualsToDeactivate;
     [SerializeField] GameObject _trailToDeactivate;
     [SerializeField] float _speed = 10f;
+    private bool _active = true;
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("bomb entered");
-        if (other.tag == "City")
+        if (_active)
         {
-            // Destroying bomb, don't play explosion
-            DestroyBomb(false);
-            // Destroying city
-            other.GetComponent<City>().DestroyCity();
-        }
-        else if (other.tag == "MissileBase")
-        {
-            // Destroying bomb, don't play explosion
-            DestroyBomb(false);
-            // Destroying city
-            other.GetComponent<MissileBase>().DestroyBase();
-        }
-        else if (other.tag == "Plane")
-        {
-            // Destroying bomb, don't play explosion
-            DestroyBomb(true);
+            Debug.Log($"bomb entered {other.gameObject.name}");
+            if (other.tag == "City")
+            {
+                // Destroying bomb, don't play explosion
+                DestroyBomb(false);
+                // Destroying city
+                other.GetComponent<City>().DestroyCity();
+            }
+            else if (other.tag == "MissileBase")
+            {
+                // Destroying bomb, don't play explosion
+                DestroyBomb(false);
+                // Destroying city
+                other.GetComponent<MissileBase>().DestroyBase();
+            }
+            else if (other.tag == "Plane")
+            {
+                // Destroying bomb, don't play explosion
+                DestroyBomb(true);
+            }
         }
     }
 
-    public void DropBomb(Vector3 from, Vector3 to)
+    public void Drop(Vector3 from, Vector3 to)
     {
         // Calculating distance for the bomb to travel
         float distance = Vector3.Distance(from, to);
@@ -65,6 +69,7 @@ public class Bomb : MonoBehaviour
 
     public void DestroyBomb(bool playExplosion)
     {
+        _active = false;
         // Deactivating collider and visuals
         _colliderToDeactivate.enabled = false;
         _visualsToDeactivate.SetActive(false);
@@ -91,5 +96,10 @@ public class Bomb : MonoBehaviour
         // Destroy the particle system object then destroy bomb object
         Destroy(ps.gameObject);
         Destroy(gameObject);
+    }
+
+    public bool BombActive()
+    {
+        return _active;
     }
 }

@@ -22,9 +22,9 @@ public class PlayerController : MonoBehaviour
     // Which base was chosen to shoot from
     ChosenBase _base;
     // Whether the bases have been destroyed
-    bool _leftBaseDestroyed = false;
-    bool _middleBaseDestroyed = false;
-    bool _rightBaseDestroyed = false;
+    bool _leftBaseActive = true;
+    bool _middleBaseActive = true;
+    bool _rightBaseActive = true;
 
     enum ChosenBase
     {
@@ -36,16 +36,15 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         _plane = new Plane(Vector3.forward, 0);
-        Cursor.lockState = CursorLockMode.Confined;
     }
 
     void Update()
     {
-        _leftBaseDestroyed = _missileBases[0].GetBaseDestroyed();
-        _middleBaseDestroyed = _missileBases[1].GetBaseDestroyed();
-        _rightBaseDestroyed = _missileBases[2].GetBaseDestroyed();
+        _leftBaseActive = _missileBases[0].BaseActive();
+        _middleBaseActive = _missileBases[1].BaseActive();
+        _rightBaseActive = _missileBases[2].BaseActive();
 
-        if (!_leftBaseDestroyed || !_middleBaseDestroyed || !_rightBaseDestroyed)
+        if (_leftBaseActive || _middleBaseActive || _rightBaseActive)
         {
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
@@ -79,7 +78,6 @@ public class PlayerController : MonoBehaviour
                     missileBase.transform.position, 
                     clickedPosition,
                     travelDistance / _speed,
-                    _missileExplosion,
                     crosshair));
             // Reducing missile number at the chosen base
             ReduceMissileNumberAtBase();
@@ -94,15 +92,15 @@ public class PlayerController : MonoBehaviour
         float midDist = 1000000;
         float rightDist = 1000000;
         // Getting distance from each base
-        if (!_leftBaseDestroyed)
+        if (_leftBaseActive)
         {
             leftDist = Vector3.Distance(_baseLaunchPoints[0].transform.position, clickedPosition);
         }
-        if (!_middleBaseDestroyed)
+        if (_middleBaseActive)
         {
             midDist = Vector3.Distance(_baseLaunchPoints[1].transform.position, clickedPosition);
         }
-        if (!_rightBaseDestroyed)
+        if (_rightBaseActive)
         {
             rightDist = Vector3.Distance(_baseLaunchPoints[2].transform.position, clickedPosition);
         }
@@ -161,11 +159,10 @@ public class PlayerController : MonoBehaviour
     /// <param name="from">The position to lerp from</param>
     /// <param name="to">The position to lerp to</param>
     /// <param name="duration">Lerping duration</param>
-    /// <param name="explosion">The particle system explosion to instantiate</param>
     /// <param name="crosshair">The crosshair to destroy</param>
     /// <returns></returns>
     private IEnumerator LaunchRoutine(Transform missile, Vector3 from, Vector3 to, 
-        float duration, GameObject explosion, GameObject crosshair)
+        float duration, GameObject crosshair)
     {
         // Instantiating missile and setting initial position
         missile.position = from;
@@ -186,7 +183,7 @@ public class PlayerController : MonoBehaviour
         Destroy(crosshair);
 
         // Instantiate explosion at clicked position
-        GameObject go = Instantiate(explosion);
+        GameObject go = Instantiate(_missileExplosion);
         go.transform.position = to;
 
         ParticleSystem ps = go.GetComponent<ParticleSystem>();

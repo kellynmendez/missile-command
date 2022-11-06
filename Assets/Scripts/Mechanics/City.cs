@@ -12,6 +12,7 @@ public class City : MonoBehaviour
 
     public void DestroyCity()
     {
+        _active = false;
         // Playing explosion
         StartCoroutine(PlayExplosion(_explosionPoint.transform.position, _explosionPS));
         // Deactivating visuals and collider
@@ -35,5 +36,10 @@ public class City : MonoBehaviour
         }
         // When particle system is done playing, destroy the particle system object
         Destroy(ps.gameObject);
+    }
+
+    public bool CityActive()
+    {
+        return _active;
     }
 }

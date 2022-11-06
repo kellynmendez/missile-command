@@ -28,11 +28,6 @@ public class EnemyBomber : MonoBehaviour
         StartCoroutine(StartBombWave());
     }
 
-    void Update()
-    {
-        
-    }
-
     private IEnumerator StartBombWave()
     {
         yield return new WaitForSeconds(_startDelay);
@@ -47,7 +42,7 @@ public class EnemyBomber : MonoBehaviour
             // Removing target from target list
             _targets.Remove(target);
             // Dropping the bomb
-            bomb.DropBomb(transform.position, target.transform.position);
+            bomb.Drop(transform.position, target.transform.position);
             yield return new WaitForSeconds(_interval);
         }
     }

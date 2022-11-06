@@ -24,14 +24,20 @@ public class MissileExplosion : MonoBehaviour
             City city = _collisionEvents[i].colliderComponent.gameObject.GetComponent<City>();
             if (city)
             {
-                city.DestroyCity();
+                if (city.CityActive())
+                {
+                    city.DestroyCity();
+                }
             }
 
-            // if particle entered bomb, then destroy it
+            // If particle entered bomb, then destroy it
             Bomb bomb = _collisionEvents[i].colliderComponent.gameObject.GetComponent<Bomb>();
             if (bomb)
             {
-                bomb.DestroyBomb(true);
+                if (bomb.BombActive())
+                {
+                    bomb.DestroyBomb(true);
+                }
             }
         }
     }
