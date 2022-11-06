@@ -2,18 +2,53 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Plane bombers or satellites
 public class Bomber : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] GameObject _bombExplosion;
+    [SerializeField] GameObject _launchPoint;
+    //[SerializeField] Collider _colliderToDeactivate;
+    [SerializeField] GameObject _visualsToDeactivate;
+    private bool _active = true;
+
+    public void DestroyBomb(bool playExplosion)
     {
-        
+        _active = false;
+        // Deactivating collider and visuals
+        //_colliderToDeactivate.enabled = false;
+        _visualsToDeactivate.SetActive(false);
+        // Instantiating explosion
+        if (playExplosion)
+        {
+            StartCoroutine(PlayExplosion(transform.position));
+        }
+        // Increment score
+        UIManager.Instance.BomberHitIncrementScore();
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator PlayExplosion(Vector3 position)
     {
-        
+        // Instantiate explosion at given position
+        GameObject go = Instantiate(_bombExplosion);
+        go.transform.position = position;
+
+        ParticleSystem ps = go.GetComponent<ParticleSystem>();
+        // Wait for the particle system to be done playing
+        while (ps.isPlaying)
+        {
+            yield return null;
+        }
+        // Destroy the particle system object then destroy bomb object
+        Destroy(ps.gameObject);
+        Destroy(gameObject);
+    }
+
+    public Vector3 GetLaunchPoint()
+    {
+        return _launchPoint.transform.position;
+    }
+
+    public bool BomberActive()
+    {
+        return _active;
     }
 }

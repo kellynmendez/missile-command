@@ -35,7 +35,7 @@ public class MissileExplosion : MonoBehaviour
             {
                 if (bomb.BombActive())
                 {
-                    bomb.DestroyBomb(true);
+                    bomb.DestroyBomb(true, true);
                 }
             }
         }

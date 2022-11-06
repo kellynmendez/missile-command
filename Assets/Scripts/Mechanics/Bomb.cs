@@ -13,27 +13,27 @@ public class Bomb : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log($"Entered {other.gameObject.name}");
         if (_active)
         {
-            Debug.Log($"bomb entered {other.gameObject.name}");
             if (other.tag == "City")
             {
                 // Destroying bomb, don't play explosion
-                DestroyBomb(false);
+                DestroyBomb(false, false);
                 // Destroying city
                 other.GetComponent<City>().DestroyCity();
             }
             else if (other.tag == "MissileBase")
             {
                 // Destroying bomb, don't play explosion
-                DestroyBomb(false);
+                DestroyBomb(false, false);
                 // Destroying city
                 other.GetComponent<MissileBase>().DestroyBase();
             }
             else if (other.tag == "Plane")
             {
-                // Destroying bomb, don't play explosion
-                DestroyBomb(true);
+                // Destroying bomb, play explosion
+                DestroyBomb(true, false);
             }
         }
     }
@@ -68,20 +68,27 @@ public class Bomb : MonoBehaviour
         yield break;
     }
 
-    public void DestroyBomb(bool playExplosion)
+    public void DestroyBomb(bool playExplosion, bool destroyedByMissile)
     {
         _active = false;
         // Deactivating collider and visuals
         _colliderToDeactivate.enabled = false;
         _visualsToDeactivate.SetActive(false);
         _trailToDeactivate.SetActive(false);
+        // Increment score
+        if (destroyedByMissile)
+        {
+            UIManager.Instance.BombHitIncrementScore();
+        }
         // Instantiating explosion
         if (playExplosion)
         {
             StartCoroutine(PlayExplosion(transform.position));
         }
-        // Increment score
-        UIManager.Instance.BombHitIncrementScore();
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     private IEnumerator PlayExplosion(Vector3 position)

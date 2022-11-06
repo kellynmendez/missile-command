@@ -13,9 +13,9 @@ public class SplitBombDropper : MonoBehaviour
 
     private List<GameObject> _targets;
     private int _numBombs = 3;
-    int _bombsDestroyed = 0;
-    bool _waveFinished = false;
-    List<Bomb> _bombsDropped;
+    private int _bombsDestroyed = 0;
+    private bool _waveFinished = false;
+    private List<Bomb> _bombsDropped;
 
     private void Awake()
     {
@@ -42,6 +42,7 @@ public class SplitBombDropper : MonoBehaviour
 
     void Update()
     {
+        // Checking if all bombs that have been released have been destroyed
         _bombsDestroyed = 0;
         foreach (Bomb bomb in _bombsDropped)
         {
@@ -50,8 +51,8 @@ public class SplitBombDropper : MonoBehaviour
                 _bombsDestroyed++;
             }
         }
-
-        if (_bombsDestroyed == _bombsDropped.Count)
+        // If they have, then the wave of bombs is finished
+        if (_bombsDestroyed >= _bombsDropped.Count)
         {
             _waveFinished = true;
         }
@@ -87,22 +88,36 @@ public class SplitBombDropper : MonoBehaviour
 
         /*****Splitting the bomb*****/
 
-        for (int i = 1; i < _bombsDropped.Count; i++)
+        if (ogBomb)
         {
-            // Getting first target
-            GameObject cloneTarget = RandomTarget();
-            // Removing target from target list
-            _targets.Remove(cloneTarget);
-            // Dropping both bombs
-            if (ogBomb)
+            for (int i = 1; i < _bombsDropped.Count; i++)
             {
                 Vector3 startPosition = ogBomb.transform.position;
-                // Activating the new bombs
+                // Activating the new bomb
                 Bomb cloneBomb = _bombsDropped[i];
                 cloneBomb.gameObject.SetActive(true);
                 cloneBomb.gameObject.transform.position = startPosition;
+                // Getting target
+                GameObject cloneTarget = RandomTarget();
+                // Removing target from target list
+                _targets.Remove(cloneTarget);
+                // Dropping bomb
                 cloneBomb.Drop(startPosition, cloneTarget.transform.position);
             }
+        }
+        // If the original bmob was killed before splitting, destroy all instantiated bombs
+        else
+        {
+            for (int i = 0; i < _bombsDropped.Count; i++)
+            {
+                if (_bombsDropped[i] && !_bombsDropped[i].gameObject.activeSelf)
+                {
+                    Destroy(_bombsDropped[i].gameObject);
+                }
+            }
+
+            // Clear the list after destroying all bombs that were isntantiated
+            _bombsDropped.Clear();
         }
     }
 
