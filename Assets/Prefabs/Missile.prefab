@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 3007765281916272770}
   - component: {fileID: 1143603412101804114}
   - component: {fileID: 4822725207405936777}
-  m_Layer: 0
-  m_Name: LaunchedMissile
+  m_Layer: 7
+  m_Name: Missile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -108,7 +108,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3304166723729084093}
   - component: {fileID: 5891136977510645746}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}

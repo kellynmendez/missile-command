@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5218410687864995302}
   - component: {fileID: 502739218820272410}
   m_Layer: 0
-  m_Name: MissileExplosion
+  m_Name: CityExplosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -170,8 +170,8 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.1
-      minScalar: 0.8
+      scalar: 1.2
+      minScalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -224,7 +224,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0, g: 0.08927679, b: 1, a: 1}
+      maxColor: {r: 0.11783209, g: 0.8584906, b: 0, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -3844,7 +3844,7 @@ ParticleSystem:
     radiusScale: 1
     collidesWith:
       serializedVersion: 2
-      m_Bits: 448
+      m_Bits: 320
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5

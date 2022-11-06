@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 146264544386219760}
   - component: {fileID: 146264544386219725}
   - component: {fileID: 146264544386219762}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 146264545266156229}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: MissileVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -124,7 +124,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 146264545620474115}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Art
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -160,7 +160,7 @@ GameObject:
   - component: {fileID: 146264546059595554}
   - component: {fileID: 146264546059595583}
   - component: {fileID: 146264546059595580}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -243,7 +243,7 @@ GameObject:
   - component: {fileID: 6893976448090267995}
   - component: {fileID: 6893976448090267941}
   - component: {fileID: 6893976448090267940}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

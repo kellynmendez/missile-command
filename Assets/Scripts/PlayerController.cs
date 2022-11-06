@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject[] _baseLaunchPoints;
     // Speed of missile
     [SerializeField] float _speed = 40f;
+    // Crosshair to instantiate on launch
+    [SerializeField] GameObject _crosshair;
 
     // Plane used to determine mouse click position in 3d world space
     private Plane _plane;
@@ -34,6 +36,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         _plane = new Plane(Vector3.forward, 0);
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     void Update()
@@ -63,7 +66,9 @@ public class PlayerController : MonoBehaviour
             clickedPosition = ray.GetPoint(distance);
             // Getting closest missile base
             GameObject missileBase = FindClosestMissileBase(clickedPosition);
-            // Instantiating explosion at mouse click position TODO: change later
+            // Instantiating the crosshair at mouse position
+            GameObject crosshair = InstantiateCrosshair();
+            // Instantiating missile at chosen missile base
             GameObject missile = Instantiate(_missile);
             missile.transform.position = missileBase.transform.position;
             // Calculating distance for the missile to travel
@@ -74,7 +79,8 @@ public class PlayerController : MonoBehaviour
                     missileBase.transform.position, 
                     clickedPosition,
                     travelDistance / _speed,
-                    _missileExplosion));
+                    _missileExplosion,
+                    crosshair));
             // Reducing missile number at the chosen base
             ReduceMissileNumberAtBase();
         }
@@ -120,6 +126,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Reduces the missile number at the base that was shot from
     private void ReduceMissileNumberAtBase()
     {
         if (_base == ChosenBase.Left)
@@ -136,8 +143,29 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Instantiates the crosshair as a child of the canvas at the clicked position
+    private GameObject InstantiateCrosshair()
+    {
+        GameObject ch = Instantiate(_crosshair);
+        ch.transform.SetParent(FindObjectOfType<Canvas>().transform, false);
+        ch.transform.position = Input.mousePosition;
+        return ch;
+    }
+
+    /// <summary>
+    /// Launches the missile by lerping its position to the clicked position, destroying the
+    /// crosshair that was instantiated before and instantiating the explosion, then destroying
+    /// the particle system explosion object after it is done playing.
+    /// </summary>
+    /// <param name="missile">The missile transform to lerp</param>
+    /// <param name="from">The position to lerp from</param>
+    /// <param name="to">The position to lerp to</param>
+    /// <param name="duration">Lerping duration</param>
+    /// <param name="explosion">The particle system explosion to instantiate</param>
+    /// <param name="crosshair">The crosshair to destroy</param>
+    /// <returns></returns>
     private IEnumerator LaunchRoutine(Transform missile, Vector3 from, Vector3 to, 
-        float duration, GameObject explosion)
+        float duration, GameObject explosion, GameObject crosshair)
     {
         // Instantiating missile and setting initial position
         missile.position = from;
@@ -154,6 +182,8 @@ public class PlayerController : MonoBehaviour
 
         // Destroying missile once it reaches the clicked position
         Destroy(missile.gameObject);
+        // Destroy crosshair once missile reaches the position
+        Destroy(crosshair);
 
         // Instantiate explosion at clicked position
         GameObject go = Instantiate(explosion);
