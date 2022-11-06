@@ -44,7 +44,9 @@ public class PlayerController : MonoBehaviour
         _middleBaseActive = _missileBases[1].BaseActive();
         _rightBaseActive = _missileBases[2].BaseActive();
 
-        if (_leftBaseActive || _middleBaseActive || _rightBaseActive)
+        // If there are missiles left and the screen is not paused
+        if ((_leftBaseActive || _middleBaseActive || _rightBaseActive) 
+            && Time.timeScale != 0)
         {
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
@@ -129,15 +131,15 @@ public class PlayerController : MonoBehaviour
     {
         if (_base == ChosenBase.Left)
         {
-            _missileBases[0].MissileLaunched();
+            _missileBases[0].RemoveMissile();
         }
         else if (_base == ChosenBase.Middle)
         {
-            _missileBases[1].MissileLaunched();
+            _missileBases[1].RemoveMissile();
         }
         else
         {
-            _missileBases[2].MissileLaunched();
+            _missileBases[2].RemoveMissile();
         }
     }
 

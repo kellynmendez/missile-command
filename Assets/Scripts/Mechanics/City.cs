@@ -8,7 +8,14 @@ public class City : MonoBehaviour
     [SerializeField] Collider _colliderToDeactivate;
     [SerializeField] GameObject _explosionPS;
     [SerializeField] GameObject _explosionPoint;
-    bool _active = true;
+
+    private bool _active = true;
+    private LevelManager _levelManager;
+
+    private void Awake()
+    {
+        _levelManager = FindObjectOfType<LevelManager>();
+    }
 
     public void DestroyCity()
     {
@@ -18,8 +25,19 @@ public class City : MonoBehaviour
         // Deactivating visuals and collider
         _visualsToDeactivate.SetActive(false);
         _colliderToDeactivate.enabled = false;
+        // Decrementing city count
+        _levelManager.DecrementCityCount();
         // Playing sound effect TODO
 
+    }
+
+    // For UI bonus points routine
+    public void RemoveCity()
+    {
+        _active = false;
+        // Deactivating visuals and collider
+        _visualsToDeactivate.SetActive(false);
+        _colliderToDeactivate.enabled = false;
     }
 
     private IEnumerator PlayExplosion(Vector3 position, GameObject explosion)

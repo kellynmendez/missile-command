@@ -13,9 +13,14 @@ public class SplitBomber : MonoBehaviour
     [SerializeField] float _splitDelay = 10f;
 
     private List<GameObject> _targets;
+    private int _numBombs = 3;
+    int _bombsDestroyed = 0;
+    bool _waveFinished = false;
+    List<Bomb> _bombsDropped;
 
     private void Awake()
     {
+        _bombsDropped = new List<Bomb>();
         _targets = new List<GameObject>();
         for (int i = 0; i < _targetsArray.Length; i++)
         {
@@ -30,7 +35,18 @@ public class SplitBomber : MonoBehaviour
 
     void Update()
     {
-        
+        foreach (Bomb bomb in _bombsDropped)
+        {
+            if (!bomb.BombActive())
+            {
+                _bombsDestroyed++;
+            }
+        }
+
+        if (_bombsDestroyed == _numBombs)
+        {
+            _waveFinished = true;
+        }
     }
 
     private IEnumerator StartBombWave()
@@ -51,6 +67,7 @@ public class SplitBomber : MonoBehaviour
         // Instantiating the bomb
         Bomb bomb = Instantiate(_enemyBomb);
         bomb.gameObject.transform.position = transform.position;
+        _bombsDropped.Add(bomb);
         // Getting the target
         GameObject target = RandomTarget();
         // Removing target from target list
@@ -81,7 +98,14 @@ public class SplitBomber : MonoBehaviour
             bomb2.gameObject.transform.position = startPosition;
             bomb1.Drop(startPosition, target1.transform.position);
             bomb2.Drop(startPosition, target2.transform.position);
+            _bombsDropped.Add(bomb1);
+            _bombsDropped.Add(bomb2);
         }
         
+    }
+
+    public bool GetWaveFinished()
+    {
+        return _waveFinished;
     }
 }

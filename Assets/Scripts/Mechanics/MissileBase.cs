@@ -7,16 +7,23 @@ public class MissileBase : MonoBehaviour
     [SerializeField] GameObject[] _missiles;
     [SerializeField] GameObject _explosion;
     [SerializeField] GameObject _explosionPoint;
-    int _index = 0;
-    bool _active = true;
+    private int _index = 0;
+    private int _missilesLeft;
+    private bool _active = true;
 
-    public void MissileLaunched()
+    private void Awake()
+    {
+        _missilesLeft = _missiles.Length;
+    }
+
+    public void RemoveMissile()
     {
         if (_active)
         {
             GameObject go = _missiles[_index];
             Destroy(go);
             _index++;
+            _missilesLeft--;
 
             if (_index >= _missiles.Length)
             {
@@ -28,6 +35,7 @@ public class MissileBase : MonoBehaviour
     public void DestroyBase()
     {
         _active = false;
+        _missilesLeft = 0;
         // Play explosion
         StartCoroutine(PlayExplosion(_explosionPoint.transform.position));
         // Destroying the missiles at the base
@@ -35,6 +43,11 @@ public class MissileBase : MonoBehaviour
         {
             Destroy(_missiles[i]);
         }
+    }
+
+    public int GetMissilesLeft()
+    {
+        return _missilesLeft;
     }
 
     public bool BaseActive()

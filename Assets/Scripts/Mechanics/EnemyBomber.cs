@@ -8,14 +8,19 @@ public class EnemyBomber : MonoBehaviour
     [SerializeField] GameObject[] _targetsArray;
     [SerializeField] Bomb _enemyBomb;
     [SerializeField] GameObject _bombExplosion;
-    [SerializeField] int _normalBombNum = 2;
+    [SerializeField] int _bombNum = 2;
     [SerializeField] float _interval = 15f;
     [SerializeField] float _startDelay = 5f;
+
+    int _bombsDestroyed = 0;
+    bool _waveFinished = false;
+    List<Bomb> _bombsDropped;
 
     private List<GameObject> _targets;
 
     private void Awake()
     {
+        _bombsDropped = new List<Bomb>();
         _targets = new List<GameObject>();
         for (int i = 0; i < _targetsArray.Length; i++)
         {
@@ -28,15 +33,33 @@ public class EnemyBomber : MonoBehaviour
         StartCoroutine(StartBombWave());
     }
 
+    private void Update()
+    {
+        _bombsDestroyed = 0;
+        foreach (Bomb bomb in _bombsDropped)
+        {
+            if (!bomb.BombActive())
+            {
+                _bombsDestroyed++;
+            }
+        }
+
+        if (_bombsDestroyed == _bombNum)
+        {
+            _waveFinished = true;
+        }
+    }
+
     private IEnumerator StartBombWave()
     {
         yield return new WaitForSeconds(_startDelay);
 
-        for (int i = 0; i < _normalBombNum; i++)
+        for (int i = 0; i < _bombNum; i++)
         {
             // Instantiating the bomb
             Bomb bomb = Instantiate(_enemyBomb);
             bomb.gameObject.transform.position = transform.position;
+            _bombsDropped.Add(bomb);
             // Getting the target
             GameObject target = RandomTarget();
             // Removing target from target list
@@ -51,5 +74,10 @@ public class EnemyBomber : MonoBehaviour
     {
         int chosenTargetIdx = Random.Range(0, _targets.Count);
         return _targets[chosenTargetIdx];
+    }
+
+    public bool GetWaveFinished()
+    {
+        return _waveFinished;
     }
 }

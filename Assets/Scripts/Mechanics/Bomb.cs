@@ -79,6 +79,8 @@ public class Bomb : MonoBehaviour
         {
             StartCoroutine(PlayExplosion(transform.position));
         }
+        // Increment score
+        UIManager.Instance.BombHitIncrementScore();
     }
 
     private IEnumerator PlayExplosion(Vector3 position)
