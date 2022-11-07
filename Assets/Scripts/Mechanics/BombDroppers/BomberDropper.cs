@@ -105,7 +105,10 @@ public class BomberDropper : MonoBehaviour
         }
 
         if (bomber)
+        {
             bomber.position = to;
+            _bomber.StopBomberAudioLoop();
+        }
 
         yield break;
     }

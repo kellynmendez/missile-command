@@ -80,4 +80,9 @@ public class Bomber : MonoBehaviour
             _audioSource.PlayOneShot(_explodeSFX, _audioSource.volume);
         }
     }
+
+    public void StopBomberAudioLoop()
+    {
+        _audioSource.Stop();
+    }
 }
