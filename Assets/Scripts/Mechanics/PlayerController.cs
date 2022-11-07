@@ -17,6 +17,11 @@ public class PlayerController : MonoBehaviour
     // Crosshair to instantiate on launch
     [SerializeField] GameObject _crosshair;
 
+    [Header("Feedback")]
+    [SerializeField] AudioClip _shootSFX = null;
+    [SerializeField] AudioClip _explodeSFX = null;
+    private AudioSource _audioSource;
+
     // Plane used to determine mouse click position in 3d world space
     private Plane _plane;
     // Which base was chosen to shoot from
@@ -36,6 +41,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         _plane = new Plane(Vector3.forward, 0);
+        _audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -58,6 +64,7 @@ public class PlayerController : MonoBehaviour
 
     private void LaunchMissile()
     {
+        PlayShootSFX();
         // Using ray and invisible plane to get position of mouse click
         Vector3 clickedPosition;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -184,6 +191,9 @@ public class PlayerController : MonoBehaviour
         // Destroy crosshair once missile reaches the position
         Destroy(crosshair);
 
+        // Playing explosion sfx
+        PlayExplodeSFX();
+
         // Instantiate explosion at clicked position
         GameObject go = Instantiate(_missileExplosion);
         go.transform.position = to;
@@ -198,5 +208,21 @@ public class PlayerController : MonoBehaviour
         Destroy(ps.gameObject);
 
         yield break;
+    }
+
+    public void PlayShootSFX()
+    {
+        if (_audioSource != null && _shootSFX != null)
+        {
+            _audioSource.PlayOneShot(_shootSFX, _audioSource.volume);
+        }
+    }
+
+    public void PlayExplodeSFX()
+    {
+        if (_audioSource != null && _explodeSFX != null)
+        {
+            _audioSource.PlayOneShot(_explodeSFX, _audioSource.volume);
+        }
     }
 }

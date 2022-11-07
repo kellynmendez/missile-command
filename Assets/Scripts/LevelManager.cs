@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
@@ -8,9 +9,21 @@ public class LevelManager : MonoBehaviour
     [SerializeField] SplitBombDropper[] _splitDroppers;
     [SerializeField] BomberDropper[] _bomberDroppers;
 
+    private UIManager _uiManager;
     private int _cityCount = 6;
     private bool _waveFinished = false;
     private bool _levelFinished = false;
+
+    private void Awake()
+    {
+        _uiManager = FindObjectOfType<UIManager>();
+    }
+
+    private void Start()
+    {
+        Time.timeScale = 0;
+        _uiManager.ShowStartText(true);
+    }
 
     private void Update()
     {
@@ -57,14 +70,29 @@ public class LevelManager : MonoBehaviour
             // Checking if cities have all been destroyed
             if (_cityCount == 0)
             {
-                UIManager.Instance.LevelLost();
+                _uiManager.LevelLost();
                 _levelFinished = true;
             }
             else if (_waveFinished)
             {
-                UIManager.Instance.LevelFinished();
+                _uiManager.LevelFinished();
                 _levelFinished = true;
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            // Reloading the level
+            int activeSceneIndex = SceneManager.GetActiveScene().buildIndex;
+            SceneManager.LoadScene(activeSceneIndex);
+            // Unfreezing screen
+            if (Time.timeScale == 0)
+                Time.timeScale = 1;
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Time.timeScale = 1;
+            _uiManager.ShowStartText(false);
         }
     }
 

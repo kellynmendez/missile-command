@@ -8,7 +8,19 @@ public class Bomber : MonoBehaviour
     [SerializeField] GameObject _launchPoint;
     [SerializeField] Collider _colliderToDeactivate;
     [SerializeField] GameObject _visualsToDeactivate;
+
+    [Header("Feedback")]
+    [SerializeField] AudioClip _explodeSFX = null;
+    private AudioSource _audioSource;
+
     private bool _active = true;
+    private UIManager _uiManager;
+
+    private void Awake()
+    {
+        _audioSource = GetComponent<AudioSource>();
+        _uiManager = FindObjectOfType<UIManager>();
+    }
 
     public void DestroyBomber(bool playExplosion, bool destroyedByMissile)
     {
@@ -19,7 +31,7 @@ public class Bomber : MonoBehaviour
         // Increment score
         if (destroyedByMissile)
         {
-            UIManager.Instance.BomberHitIncrementScore();
+            _uiManager.BomberHitIncrementScore();
         }
         // Instantiating explosion
         if (playExplosion)
@@ -34,6 +46,7 @@ public class Bomber : MonoBehaviour
 
     private IEnumerator PlayExplosion(Vector3 position)
     {
+        PlayExplodeSFX();
         // Instantiate explosion at given position
         GameObject go = Instantiate(_bombExplosion);
         go.transform.position = position;
@@ -57,5 +70,14 @@ public class Bomber : MonoBehaviour
     public bool BomberActive()
     {
         return _active;
+    }
+
+    public void PlayExplodeSFX()
+    {
+        if (_audioSource != null && _explodeSFX != null)
+        {
+            _audioSource.loop = false;
+            _audioSource.PlayOneShot(_explodeSFX, _audioSource.volume);
+        }
     }
 }

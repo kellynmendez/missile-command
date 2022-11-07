@@ -9,12 +9,17 @@ public class City : MonoBehaviour
     [SerializeField] GameObject _explosionPS;
     [SerializeField] GameObject _explosionPoint;
 
+    [Header("Feedback")]
+    [SerializeField] AudioClip _explodeSFX = null;
+    private AudioSource _audioSource;
+
     private bool _active = true;
     private LevelManager _levelManager;
 
     private void Awake()
     {
         _levelManager = FindObjectOfType<LevelManager>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     public void DestroyCity()
@@ -42,6 +47,7 @@ public class City : MonoBehaviour
 
     private IEnumerator PlayExplosion(Vector3 position, GameObject explosion)
     {
+        PlayExplodeSFX();
         // Instantiate explosion at clicked position
         GameObject go = Instantiate(explosion);
         go.transform.position = position;
@@ -59,5 +65,13 @@ public class City : MonoBehaviour
     public bool CityActive()
     {
         return _active;
+    }
+
+    public void PlayExplodeSFX()
+    {
+        if (_audioSource != null && _explodeSFX != null)
+        {
+            _audioSource.PlayOneShot(_explodeSFX, _audioSource.volume);
+        }
     }
 }

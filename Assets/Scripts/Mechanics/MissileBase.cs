@@ -7,13 +7,31 @@ public class MissileBase : MonoBehaviour
     [SerializeField] GameObject[] _missiles;
     [SerializeField] GameObject _explosion;
     [SerializeField] GameObject _explosionPoint;
+    [SerializeField] int _lowMissileNumber = 3;
+
+    [Header("Feedback")]
+    [SerializeField] AudioClip _explodeSFX = null;
+    private AudioSource _audioSource;
+
     private int _index = 0;
-    private int _missilesLeft;
-    private bool _active = true;
+    private int _missilesLeft = 10;
+    private bool _active;
+    private bool _lowOnMissiles = false;
 
     private void Awake()
     {
+        _active = true;
         _missilesLeft = _missiles.Length;
+        _audioSource = GetComponent<AudioSource>();
+
+    }
+
+    private void Update()
+    {
+        if (_missilesLeft <= _lowMissileNumber)
+        {
+            _lowOnMissiles = true;
+        }
     }
 
     public void RemoveMissile()
@@ -55,8 +73,14 @@ public class MissileBase : MonoBehaviour
         return _active;
     }
 
+    public bool LowOnMissiles()
+    {
+        return _lowOnMissiles;
+    }
+
     private IEnumerator PlayExplosion(Vector3 position)
     {
+        PlayExplodeSFX();
         // Instantiate explosion at given position
         GameObject go = Instantiate(_explosion);
         go.transform.position = position;
@@ -70,5 +94,13 @@ public class MissileBase : MonoBehaviour
         // Destroy the particle system object then destroy bomb object
         Destroy(ps.gameObject);
         Destroy(gameObject);
+    }
+
+    public void PlayExplodeSFX()
+    {
+        if (_audioSource != null && _explodeSFX != null)
+        {
+            _audioSource.PlayOneShot(_explodeSFX, _audioSource.volume);
+        }
     }
 }

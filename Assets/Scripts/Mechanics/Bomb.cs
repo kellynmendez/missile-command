@@ -9,11 +9,22 @@ public class Bomb : MonoBehaviour
     [SerializeField] GameObject _visualsToDeactivate;
     [SerializeField] GameObject _trailToDeactivate;
     [SerializeField] float _speed = 10f;
+
+    private UIManager _uiManager;
     private bool _active = true;
+
+    [Header("Feedback")]
+    [SerializeField] AudioClip _explodeSFX = null;
+    private AudioSource _audioSource;
+
+    private void Awake()
+    {
+        _audioSource = GetComponent<AudioSource>();
+        _uiManager = FindObjectOfType<UIManager>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"Entered {other.gameObject.name}");
         if (_active)
         {
             if (other.tag == "City")
@@ -78,7 +89,7 @@ public class Bomb : MonoBehaviour
         // Increment score
         if (destroyedByMissile)
         {
-            UIManager.Instance.BombHitIncrementScore();
+            _uiManager.BombHitIncrementScore();
         }
         // Instantiating explosion
         if (playExplosion)
@@ -93,6 +104,7 @@ public class Bomb : MonoBehaviour
 
     private IEnumerator PlayExplosion(Vector3 position)
     {
+        PlayExplodeSFX();
         // Instantiate explosion at given position
         GameObject go = Instantiate(_bombExplosion);
         go.transform.position = position;
@@ -111,5 +123,13 @@ public class Bomb : MonoBehaviour
     public bool BombActive()
     {
         return _active;
+    }
+
+    public void PlayExplodeSFX()
+    {
+        if (_audioSource != null && _explodeSFX != null)
+        {
+            _audioSource.PlayOneShot(_explodeSFX, _audioSource.volume);
+        }
     }
 }

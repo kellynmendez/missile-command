@@ -145,6 +145,7 @@ public class BomberDropper : MonoBehaviour
             }
         }
     }
+
     public bool GetWaveFinished()
     {
         return _waveFinished;

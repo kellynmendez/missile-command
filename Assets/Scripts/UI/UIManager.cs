@@ -5,17 +5,18 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    // Singleton
-    public static UIManager Instance = null;
-
     // Variables
     [SerializeField] Texture2D _crosshair;
     [SerializeField] GameObject _bonusPointsPopUp;
     [SerializeField] GameObject _lostLevelPopUp;
     [SerializeField] TMP_Text _scoreText;
+    [SerializeField] TMP_Text _startText;
     [SerializeField] TMP_Text _missileBonusText;
     [SerializeField] TMP_Text _cityBonusText;
     [SerializeField] TMP_Text _lostTotalPointsText;
+    [SerializeField] TMP_Text _baseOneSubText;
+    [SerializeField] TMP_Text _baseTwoSubText;
+    [SerializeField] TMP_Text _baseThreeSubText;
     [SerializeField] GameObject[] _missileImages;
     [SerializeField] GameObject[] _cityImages;
     [Header("Cities and Missiles")]
@@ -32,6 +33,9 @@ public class UIManager : MonoBehaviour
     [Header("Bonus Points")]
     [SerializeField] int _unusedMissilesPoints = 5;
     [SerializeField] int _savedCitiesPoints = 100;
+    [Header("Feedback")]
+    [SerializeField] AudioClip _bonusSFX = null;
+    private AudioSource _audioSource;
 
     private int _totalPoints = 0;
     private int _missileBonus = 0;
@@ -40,17 +44,7 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            // doesn't exist yet, this is now our singleton
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-
+        _audioSource = GetComponent<AudioSource>();
         _scoreText.text = "0";
         _missileBonusText.text = "0";
         _cityBonusText.text = "0";
@@ -65,6 +59,25 @@ public class UIManager : MonoBehaviour
             CursorMode.Auto);
         // Confining cursor
         //Cursor.lockState = CursorLockMode.Confined;
+    }
+
+    private void Update()
+    {
+        // Checking missile base one
+        if (!_missileBaseArray[0].BaseActive())
+            _baseOneSubText.text = "OUT";
+        else if (_missileBaseArray[0].LowOnMissiles())
+            _baseOneSubText.text = "LOW";
+        // Checking missile base two
+        if (!_missileBaseArray[1].BaseActive())
+            _baseTwoSubText.text = "OUT";
+        else if (_missileBaseArray[1].LowOnMissiles())
+            _baseTwoSubText.text = "LOW";
+        // Checking missile base three
+        if (!_missileBaseArray[2].BaseActive())
+            _baseThreeSubText.text = "OUT";
+        else if (_missileBaseArray[2].LowOnMissiles())
+            _baseThreeSubText.text = "LOW";
     }
 
     public void LevelFinished()
@@ -96,6 +109,7 @@ public class UIManager : MonoBehaviour
                 int mCount = 0;
                 while (mCount < missilesLeft)
                 {
+                    PlaySFX();
                     _missileImages[i].SetActive(true);
                     _missileBonus += _unusedMissilesPoints;
                     _missileBonusText.text = _missileBonus.ToString();
@@ -117,6 +131,7 @@ public class UIManager : MonoBehaviour
             City city = _cityArray[cCount];
             if (city.CityActive())
             {
+                PlaySFX();
                 _cityImages[i].SetActive(true);
                 _cityBonus += _savedCitiesPoints;
                 _cityBonusText.text = _cityBonus.ToString();
@@ -141,6 +156,18 @@ public class UIManager : MonoBehaviour
         _lostLevelPopUp.SetActive(true);
     }
 
+    public void ShowStartText(bool show)
+    {
+        if (show)
+        {
+            _startText.gameObject.SetActive(true);
+        }
+        else
+        {
+            _startText.gameObject.SetActive(false);
+        }
+    }
+
     private void SetTotalScoreText()
     {
         _scoreText.text = _totalPoints.ToString();
@@ -162,5 +189,14 @@ public class UIManager : MonoBehaviour
     {
         _totalPoints += _smartBombPoints;
         SetTotalScoreText();
+    }
+
+    public void PlaySFX()
+    {
+        // play sfx
+        if (_audioSource != null && _bonusSFX != null)
+        {
+            _audioSource.PlayOneShot(_bonusSFX, _audioSource.volume);
+        }
     }
 }
