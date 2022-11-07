@@ -38,6 +38,16 @@ public class MissileExplosion : MonoBehaviour
                     bomb.DestroyBomb(true, true);
                 }
             }
+            
+            // If particle entered bomb, then destroy it
+            Bomber bomber = _collisionEvents[i].colliderComponent.gameObject.GetComponent<Bomber>();
+            if (bomber)
+            {
+                if (bomber.BomberActive())
+                {
+                    bomber.DestroyBomber(true, true);
+                }
+            }
         }
     }
 }

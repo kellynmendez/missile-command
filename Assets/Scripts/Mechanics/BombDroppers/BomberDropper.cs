@@ -95,13 +95,17 @@ public class BomberDropper : MonoBehaviour
         float elapsedTime = 0;
         while (elapsedTime < duration)
         {
-            bomber.position = Vector3.Lerp(from, to, elapsedTime / duration);
+            if (bomber)
+            {
+                bomber.position = Vector3.Lerp(from, to, elapsedTime / duration);
+            }
 
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        bomber.position = to;
+        if (bomber)
+            bomber.position = to;
 
         yield break;
     }

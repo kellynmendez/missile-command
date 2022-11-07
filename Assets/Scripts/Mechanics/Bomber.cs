@@ -6,23 +6,30 @@ public class Bomber : MonoBehaviour
 {
     [SerializeField] GameObject _bombExplosion;
     [SerializeField] GameObject _launchPoint;
-    //[SerializeField] Collider _colliderToDeactivate;
+    [SerializeField] Collider _colliderToDeactivate;
     [SerializeField] GameObject _visualsToDeactivate;
     private bool _active = true;
 
-    public void DestroyBomb(bool playExplosion)
+    public void DestroyBomber(bool playExplosion, bool destroyedByMissile)
     {
         _active = false;
         // Deactivating collider and visuals
-        //_colliderToDeactivate.enabled = false;
+        _colliderToDeactivate.enabled = false;
         _visualsToDeactivate.SetActive(false);
+        // Increment score
+        if (destroyedByMissile)
+        {
+            UIManager.Instance.BomberHitIncrementScore();
+        }
         // Instantiating explosion
         if (playExplosion)
         {
             StartCoroutine(PlayExplosion(transform.position));
         }
-        // Increment score
-        UIManager.Instance.BomberHitIncrementScore();
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     private IEnumerator PlayExplosion(Vector3 position)

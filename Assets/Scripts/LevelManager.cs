@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    [SerializeField] NormalBombDropper[] _bombers;
-    [SerializeField] SplitBombDropper[] _splitBombers;
+    [SerializeField] NormalBombDropper[] _normalDroppers;
+    [SerializeField] SplitBombDropper[] _splitDroppers;
+    [SerializeField] BomberDropper[] _bomberDroppers;
 
     private int _cityCount = 6;
     private bool _waveFinished = false;
@@ -19,9 +20,9 @@ public class LevelManager : MonoBehaviour
             bool checkFinished = true;
             int i = 0;
             // Checking normal bombs first
-            while (i < _bombers.Length && checkFinished)
+            while (i < _normalDroppers.Length && checkFinished)
             {
-                if (!_bombers[i].GetWaveFinished())
+                if (!_normalDroppers[i].GetWaveFinished())
                 {
                     checkFinished = false;
                 }
@@ -29,9 +30,19 @@ public class LevelManager : MonoBehaviour
             }
             // Checking split bombs second
             i = 0;
-            while (i < _splitBombers.Length && checkFinished)
+            while (i < _splitDroppers.Length && checkFinished)
             {
-                if (!_splitBombers[i].GetWaveFinished())
+                if (!_splitDroppers[i].GetWaveFinished())
+                {
+                    checkFinished = false;
+                }
+                i++;
+            }
+            // Checking bombers third
+            i = 0;
+            while (i < _bomberDroppers.Length && checkFinished)
+            {
+                if (!_bomberDroppers[i].GetWaveFinished())
                 {
                     checkFinished = false;
                 }

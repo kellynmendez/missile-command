@@ -158,12 +158,6 @@ public class UIManager : MonoBehaviour
         SetTotalScoreText();
     }
 
-    public void SatelliteHitIncrementScore()
-    {
-        _totalPoints += _satellitePoints;
-        SetTotalScoreText();
-    }
-
     public void SmartBombHitIncrementScore()
     {
         _totalPoints += _smartBombPoints;

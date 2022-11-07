@@ -580,6 +580,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 316470192}
+  - {fileID: 811491016}
   - {fileID: 275107990}
   m_Father: {fileID: 0}
   m_RootOrder: 7
@@ -936,7 +937,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 147697286}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &301981249
 GameObject:
@@ -3291,6 +3292,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 808216087}
   m_CullTransparentMesh: 1
+--- !u!1 &811491015
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 811491016}
+  - component: {fileID: 811491017}
+  m_Layer: 0
+  m_Name: SatelliteDropper
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &811491016
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 811491015}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 35.7, y: 20.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1965342777}
+  m_Father: {fileID: 147697286}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &811491017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 811491015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 421bb1451c153f849a2a9d61c1d591b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _targetsArray:
+  - {fileID: 1978459935}
+  - {fileID: 422017062}
+  - {fileID: 1933610318}
+  - {fileID: 497502157}
+  _bomberPrefab: {fileID: 2700965745410530807, guid: 9e78b12053010df43b7142f0ea184416, type: 3}
+  _enemyBomb: {fileID: 5648804161737748590, guid: eaa05619a4b989f4c95438e67f0ffb21, type: 3}
+  _bombExplosion: {fileID: 5218410687864995305, guid: 6f7154489df93fc458b7f3e3cd8cd3b1, type: 3}
+  _endPoint: {fileID: 1965342776}
+  _bomberSpeed: 3
+  _startDelay: 0
+  _dropInterval: 6
 --- !u!1 &819917864
 GameObject:
   m_ObjectHideFlags: 0
@@ -5059,7 +5117,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1377958121
 Transform:
   m_ObjectHideFlags: 0
@@ -5558,7 +5616,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1525020546
 Transform:
   m_ObjectHideFlags: 0
@@ -5849,17 +5907,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 130b9f345b7919846aed145fd53e3fc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bombers:
+  _normalDroppers:
   - {fileID: 1632816910}
   - {fileID: 1443076352}
   - {fileID: 1053765235}
   - {fileID: 1087562805}
   - {fileID: 1999609982}
   - {fileID: 967371131}
-  _splitBombers:
+  _splitDroppers:
   - {fileID: 1190531501}
   - {fileID: 1625396003}
   - {fileID: 1908226459}
+  _bomberDroppers:
+  - {fileID: 316470193}
+  - {fileID: 811491017}
 --- !u!4 &1559698222
 Transform:
   m_ObjectHideFlags: 0
@@ -7933,6 +7994,37 @@ MonoBehaviour:
   - {fileID: 981654277}
   _explosion: {fileID: 5218410687864995305, guid: 6f7154489df93fc458b7f3e3cd8cd3b1, type: 3}
   _explosionPoint: {fileID: 762304465}
+--- !u!1 &1965342776
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1965342777}
+  m_Layer: 0
+  m_Name: EndPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1965342777
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1965342776}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -76.18, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 811491016}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1966206609
 PrefabInstance:
   m_ObjectHideFlags: 0
