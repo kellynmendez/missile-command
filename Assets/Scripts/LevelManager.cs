@@ -94,6 +94,10 @@ public class LevelManager : MonoBehaviour
             Time.timeScale = 1;
             _uiManager.ShowStartText(false);
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
 
     public void DecrementCityCount()
