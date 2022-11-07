@@ -1640,7 +1640,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &384799172
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2273,7 +2273,7 @@ MonoBehaviour:
   _bonusPointsPopUp: {fileID: 1548586261}
   _lostLevelPopUp: {fileID: 1712052544}
   _scoreText: {fileID: 326645106}
-  _startText: {fileID: 0}
+  _startText: {fileID: 384799173}
   _missileBonusText: {fileID: 1288430891}
   _cityBonusText: {fileID: 762506702}
   _lostTotalPointsText: {fileID: 1596750779}
